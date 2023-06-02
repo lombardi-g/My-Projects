@@ -26,7 +26,6 @@ reader = PdfReader(r"C:\Users\gabri\OneDrive\Desktop\Projetos\venv\Diarios\2023_
 num_paginas = len(reader.pages)
 listinha=[]
 
-
 procurado1 = 'Gabriel Lombardi'
 procurado2 = 'concurso'
 
