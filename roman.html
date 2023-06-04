@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roman Numeral Converter</title>
+  <style>
+    /* CSS styling for the page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    
+    .input-group {
+      margin: 10px;
+    }
+    
+    #conversionResult {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f1f1f1;
+      height: 50px;
+    }
+
+    /* Additional styling for the link */
+    footer a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Roman Numeral Converter</h1>
+  
+  <div class="container">
+    <div class="input-group">
+      <label>Integer:</label>
+      <input type="number" id="integerInput" min="1" max="3999" oninput="convertToRoman()" />
+    </div>
+    
+    <div class="input-group">
+      <label>Roman Numeral:</label>
+      <input type="text" id="romanInput" oninput="convertToInteger()" />
+    </div>
+  </div>
+  
+  <div id="conversionResult"></div>
+  
+  <script>
+    // JavaScript functions for conversion
+    
+    function convertToRoman() {
+      const integerInput = document.getElementById('integerInput');
+      const romanInput = document.getElementById('romanInput');
+      const conversionResult = document.getElementById('conversionResult');
+      
+      const integer = parseInt(integerInput.value);
+      if (isNaN(integer) || integer < 1 || integer > 3999) {
+        romanInput.value = '';
+        conversionResult.textContent = '';
+        return;
+      }
+      
+      const roman = toRoman(integer);
+      romanInput.value = roman;
+      conversionResult.textContent = `Converted to Roman: ${roman}`;
+    }
+    
+    function convertToInteger() {
+      const romanInput = document.getElementById('romanInput');
+      const integerInput = document.getElementById('integerInput');
+      const conversionResult = document.getElementById('conversionResult');
+      
+      const roman = romanInput.value.toUpperCase();
+      
+      const integer = toInteger(roman);
+      if (integer === -1) {
+        integerInput.value = '';
+        conversionResult.textContent = '';
+        return;
+      }
+      
+      integerInput.value = integer;
+      conversionResult.textContent = `Converted to Integer: ${integer}`;
+    }
+    
+    function toRoman(integer) {
+      const romanNumerals = [
+        { value: 1000, symbol: 'M' },
+        { value: 900, symbol: 'CM' },
+        { value: 500, symbol: 'D' },
+        { value: 400, symbol: 'CD' },
+        { value: 100, symbol: 'C' },
+        { value: 90, symbol: 'XC' },
+        { value: 50, symbol: 'L' },
+        { value: 40, symbol: 'XL' },
+        { value: 10, symbol: 'X' },
+        { value: 9, symbol: 'IX' },
+        { value: 5, symbol: 'V' },
+        { value: 4, symbol: 'IV' },
+        { value: 1, symbol: 'I' }
+      ];
+      
+      let roman = '';
+      
+      for (let i = 0; i < romanNumerals.length; i++) {
+        while (integer >= romanNumerals[i].value) {
+          roman += romanNumerals[i].symbol;
+          integer -= romanNumerals[i].value;
+        }
+      }
+      
+      return roman;
+    }
+    
+    function toInteger(roman) {
+      const romanNumerals = {
+        'M': 1000,
+        'CM': 900,
+        'D': 500,
+        'CD': 400,
+        'C': 100,
+        'XC': 90,
+        'L': 50,
+        'XL': 40,
+        'X': 10,
+        'IX': 9,
+        'V': 5,
+        'IV': 4,
+        'I': 1
+      };
+      
+      let integer = 0;
+      
+      for (let i = 0; i < roman.length; i++) {
+        const currentSymbol = roman[i];
+        const currentValue = romanNumerals[currentSymbol];
+        
+        if (currentValue === undefined) {
+          return -1;
+        }
+        
+        const nextSymbol = roman[i + 1];
+        const nextValue = romanNumerals[nextSymbol];
+        
+        if (nextValue !== undefined && nextValue > currentValue) {
+          integer += nextValue - currentValue;
+          i++;
+        } else {
+          integer += currentValue;
+        }
+      }
+      
+      return integer;
+    }
+  </script>
+  <footer>
+    <a href="https://github.com/lombardi-g" target="_blank"> https://github.com/lombardi-g</a>
+  </footer>
+</body>
+</html>
