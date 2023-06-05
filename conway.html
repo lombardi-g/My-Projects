@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Conway's Game of Life</title>
+  <style>
+    /* CSS styling for the grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 20px);
+      grid-template-rows: repeat(10, 20px);
+      gap: 1px;
+      background-color: #ccc;
+    }
+
+    .cell {
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border: 1px solid #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid">
+    <!-- Grid cells -->
+  </div>
+
+  <script>
+    // JavaScript code for the Game of Life
+    const grid = document.querySelector('.grid');
+    const numRows = 10;
+    const numCols = 10;
+    let currentState = createEmptyState();
+
+    // Create an empty state with all cells dead
+    function createEmptyState() {
+      const state = [];
+      for (let row = 0; row < numRows; row++) {
+        const rowArray = [];
+        for (let col = 0; col < numCols; col++) {
+          rowArray.push(false);
+        }
+        state.push(rowArray);
+      }
+      return state;
+    }
+
+    // Function to create a cell element and append it to the grid
+    function createCell() {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      grid.appendChild(cell);
+      return cell;
+    }
+
+    // Function to generate the grid with cells
+    function generateGrid() {
+      for (let i = 0; i < numRows * numCols; i++) {
+        const cell = createCell();
+        cell.addEventListener('click', () => {
+          const row = Math.floor(i / numCols);
+          const col = i % numCols;
+          toggleCellState(row, col);
+        });
+      }
+    }
+
+    // Toggle the state of a cell and update the UI
+    function toggleCellState(row, col) {
+      currentState[row][col] = !currentState[row][col];
+      const cellIndex = row * numCols + col;
+      const cell = grid.children[cellIndex];
+      cell.style.backgroundColor = currentState[row][col] ? '#000' : '#fff';
+    }
+
+    // Function to calculate the next state of the grid
+    function calculateNextState() {
+      const nextState = createEmptyState();
+      for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+          const alive = currentState[row][col];
+          const neighbors = countLiveNeighbors(row, col);
+          if (alive) {
+            nextState[row][col] = neighbors === 2 || neighbors === 3;
+          } else {
+            nextState[row][col] = neighbors === 3;
+          }
+        }
+      }
+      currentState = nextState;
+      updateUI();
+    }
+
+    // Function to count the number of live neighbors for a given cell
+    function countLiveNeighbors(row, col) {
+      let count = 0;
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          if (i === 0 && j === 0) continue; // Exclude the cell itself
+          const neighborRow = (row + i + numRows) % numRows; // Handle wraparound
+          const neighborCol = (col + j + numCols) % numCols; // Handle wraparound
+          if (currentState[neighborRow][neighborCol]) count++;
+        }
+      }
+      return count;
+    }
+
+    // Function to update the UI based on the current state
+    function updateUI() {
+      for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+          const cellIndex = row * numCols + col;
+          const cell = grid.children[cellIndex];
+          cell.style.backgroundColor = currentState[row][col] ? '#000' : '#fff';
+        }
+      }
+    }
+
+    // Generate the grid on page load
+    generateGrid();
+
+    // Start the simulation
+    setInterval(calculateNextState, 2000); // Update every 2 seconds
+  </script>
+  <br>
+  <footer>
+    <a href="https://github.com/lombardi-g" target="_blank"> https://github.com/lombardi-g</a>
+  </footer>
+</body>
+</html>
