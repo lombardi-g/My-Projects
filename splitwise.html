@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Split Check</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    input[type="number"] {
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Split Check</h1>
+
+  <h2>Products</h2>
+  <div>
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="number" id="productPrice" placeholder="Price">
+    <button onclick="addProduct()">Add Product</button>
+  </div>
+  <br>
+  <table id="productsTable">
+    <tr>
+      <th>Product Name</th>
+      <th>Price</th>
+      <th>Consumed By</th>
+    </tr>
+  </table>
+
+  <h2>Clients</h2>
+  <div>
+    <input type="text" id="clientName" placeholder="Client Name">
+    <button onclick="addClient()">Add Client</button>
+  </div>
+  <br>
+  <table id="clientsTable">
+    <tr>
+      <th>Client Name</th>
+    </tr>
+  </table>
+
+  <h2>Split Check</h2>
+  <br>
+  <table id="splitTable">
+    <tr>
+      <th>Client</th>
+      <th>Subtotal</th>
+      <th>Total</th>
+    </tr>
+  </table>
+
+  <script>
+    const products = [];
+    const prices = [];
+    const consumedByCheckboxes = [];
+    const clients = [];
+
+    let consumption = {};
+    let subtotal = {};
+
+    function addProduct() {
+      const productName = document.getElementById('productName').value;
+      const productPrice = document.getElementById('productPrice').value;
+
+      if (productName && productPrice) {
+        products.push(productName);
+        prices.push(Number(productPrice));
+        consumedByCheckboxes.push([]);
+        createProductsTable();
+      }
+
+      document.getElementById('productName').value = '';
+      document.getElementById('productPrice').value = '';
+    }
+
+    function createProductsTable() {
+      const table = document.getElementById('productsTable');
+      table.innerHTML = `
+        <tr>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Consumed By</th>
+        </tr>
+      `;
+
+      for (let i = 0; i < products.length; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${products[i]}</td>
+          <td>${prices[i]}</td>
+          <td>${createConsumedByCheckboxes(i)}</td>
+        `;
+        table.appendChild(row);
+      }
+    }
+
+    function createConsumedByCheckboxes(productIndex) {
+      let checkboxesHTML = '';
+      for (let i = 0; i < clients.length; i++) {
+        checkboxesHTML += `
+          <label>
+            <input type="checkbox" onchange="toggleConsumedBy(${productIndex}, ${i})">
+            ${clients[i]}
+          </label>
+          <br>
+        `;
+      }
+      return checkboxesHTML;
+    }
+
+    function toggleConsumedBy(productIndex, clientIndex) {
+      const isChecked = event.target.checked;
+
+      if (isChecked) {
+        consumedByCheckboxes[productIndex].push(clientIndex);
+      } else {
+        const index = consumedByCheckboxes[productIndex].indexOf(clientIndex);
+        if (index !== -1) {
+          consumedByCheckboxes[productIndex].splice(index, 1);
+        }
+      }
+
+      calculateSplit();
+    }
+
+    function addClient() {
+      const clientName = document.getElementById('clientName').value;
+
+      if (clientName) {
+        clients.push(clientName);
+        createClientsTable();
+        createProductsTable();
+        calculateSplit();
+      }
+
+      document.getElementById('clientName').value = '';
+    }
+
+    function createClientsTable() {
+      const table = document.getElementById('clientsTable');
+      table.innerHTML = `
+        <tr>
+          <th>Client Name</th>
+        </tr>
+      `;
+
+      for (let i = 0; i < clients.length; i++) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${clients[i]}</td>
+        `;
+        table.appendChild(row);
+      }
+    }
+
+    function calculateSplit() {
+      consumption = {};
+      subtotal = {};
+
+      // Initialize consumption and subtotal objects
+      for (let i = 0; i < clients.length; i++) {
+        consumption[i] = [];
+        subtotal[i] = 0;
+      }
+
+      // Calculate consumption for each product
+      for (let i = 0; i < products.length; i++) {
+        const consumers = consumedByCheckboxes[i];
+        const price = prices[i];
+        const numConsumers = consumers.length;
+        const equalShare = numConsumers > 0 ? price / numConsumers : 0;
+
+        consumers.forEach(clientIndex => {
+          consumption[clientIndex].push(equalShare);
+        });
+      }
+
+      // Calculate subtotal for each client
+      for (let i = 0; i < clients.length; i++) {
+        const consumptionValues = consumption[i];
+        const numProductsConsumed = consumptionValues.length;
+
+        if (numProductsConsumed > 0) {
+          subtotal[i] = consumptionValues.reduce((acc, val) => acc + val, 0) / numProductsConsumed;
+        }
+      }
+
+      updateSplitTable();
+    }
+
+    function updateSplitTable() {
+      const table = document.getElementById('splitTable');
+      table.innerHTML = `
+        <tr>
+          <th>Client</th>
+          <th>Total</th>
+          <th>Total with tip</th>
+        </tr>
+      `;
+
+      for (let i = 0; i < clients.length; i++) {
+        const row = document.createElement('tr');
+        const clientSubtotal = subtotal[i];
+        const clientTotal = consumption[i].reduce((acc, val) => acc + val, 0);
+        const clientTotalwithTip = clientTotal*1.1
+        row.innerHTML = `
+          <td>${clients[i]}</td>
+          <td>${clientTotal.toFixed(2)}</td>
+          <td>${clientTotalwithTip.toFixed(2)}</td>
+        `;
+        table.appendChild(row);
+      }
+    }
+  </script>
+  <br>
+  <footer>
+    <a href="https://github.com/lombardi-g" target="_blank"> https://github.com/lombardi-g</a>
+  </footer>
+</body>
+</html>
