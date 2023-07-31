@@ -1,5 +1,5 @@
 import os
-from PyPDF2 import PdfReader
+from PyPDF2 import PdfReader, PdfWriter
 
 def isolar_paragrafo(texto,alvo):
     palavra_procurada = alvo
@@ -15,33 +15,29 @@ def isolar_paragrafo(texto,alvo):
     return paragrafos_isolados
     # trimmed_paragraphs now contains all trimmed paragraphs that contain the word "concurso"
 
+# Get path
+pdf_path = os.path.join(r"/Users/gabriel/Desktop/Projeto")
 
-
-
-caminho = os.path.join(r"C:\Users\gabri\OneDrive\Desktop\Projetos\venv\Diarios")
+# test
 # print(os.path.exists(caminho))
 
 
-reader = PdfReader(r"C:\Users\gabri\OneDrive\Desktop\Projetos\venv\Diarios\2023_01_27_1674851749.pdf")
-num_paginas = len(reader.pages)
-listinha=[]
+reader = PdfReader(pdf_path)
 
 procurado1 = 'Gabriel Lombardi'
 procurado2 = 'concurso'
 
-for pagina in range(num_paginas):
-    pagina_atual = reader.pages[pagina]
-    texto_atual = pagina_atual.extract_text()
-    if procurado1 in texto_atual:
-        listinha.append(pagina)
-        listinha.append(isolar_paragrafo(texto_atual , procurado1))
+# reader and writer perform operations
+reader = PdfReader(pdf_path)
+writer = PdfWriter()
 
-for coisas in listinha:
-    coisas = str(coisas).replace(r"\n","\n")
-    print (coisas)
-
-# caminho_arquivo = 'textodopdf.txt'
-# with open(caminho_arquivo, 'w', encoding='utf8') as arquivo:
-#     for coisas in listinha:
-#         arquivo.write('\n')
-#         arquivo.write(str(coisas))
+for page in reader.pages:
+    # Extract text from page
+    text = page.extract_text().lower()
+    
+    # Find all occurances of key word
+    if text.find(procurado1) or text.find(procurado2) > -1:
+        writer.add_page(page)
+    
+# Write all pages to new pdf, saves in working dir
+writer.write('results.pdf')
