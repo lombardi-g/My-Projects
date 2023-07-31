@@ -1,20 +1,6 @@
 import os
 from PyPDF2 import PdfReader, PdfWriter
 
-def isolar_paragrafo(texto,alvo):
-    palavra_procurada = alvo
-    paragrafos_isolados = []
-
-    paragraphs = texto.split("\n")  # Split by newline, replace "\n" with appropriate delimiter
-
-    for paragrafo in paragraphs:
-        if palavra_procurada in paragrafo:
-            paragrafo_tratado = paragrafo.strip()  # Trim leading/trailing whitespaces
-            paragrafos_isolados.append(paragrafo_tratado)
-
-    return paragrafos_isolados
-    # trimmed_paragraphs now contains all trimmed paragraphs that contain the word "concurso"
-
 # Get path
 pdf_path = os.path.join(r"/Users/gabriel/Desktop/Projeto")
 
