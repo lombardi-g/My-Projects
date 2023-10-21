@@ -1,6 +1,7 @@
 import openpyxl
 import requests
 import re
+import datetime
 # import os
 # import tkinter as tk
 # from tkinter import messagebox
@@ -26,9 +27,23 @@ opponent = [team for team in teams if team.upper() != 'FIGUEIRENSE'][0]
 full_tournament = targetURL.find(string=caps_lock_ignore('sub-'))
 category = "SUB-"+full_tournament[full_tournament.upper().find("SUB-")+4:full_tournament.upper().find("SUB-")+6]
 
+# Find date
+date_locator = targetURL.find(string="Data:")
+date = date_locator.find_next(string=caps_lock_ignore('/202'))
+time_locator = date.find_next(string='Horário:')
+time = time_locator.find_next().get_text()
+
+# Find local
+place_locator = time_locator.find_next(string="Local:").find_next()
+place = place_locator.get_text()
+
 # tests
 print (BeautifulSoup().PREFERRED_PARSER)
 print (openpyxl.__version__)
 print(opponent)
 print(full_tournament)
 print(category)
+print(date_locator)
+print(date)
+print(time)
+print(place)
