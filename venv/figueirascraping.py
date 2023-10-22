@@ -1,13 +1,13 @@
-import openpyxl
+# import openpyxl
 import requests
 import re
-import datetime
+# import datetime
 # import os
 # import tkinter as tk
 # from tkinter import messagebox
 from bs4 import BeautifulSoup
-import openpyxl
-from openpyxl import load_workbook
+# import openpyxl
+# from openpyxl import load_workbook
 
 # def defineURL(): #set URL everytime the program runs. use tkinter?
 #     entry = tk.Entry()
@@ -16,48 +16,48 @@ from openpyxl import load_workbook
 def caps_lock_ignore(text):
     return re.compile(text,re.I)
                       
-def pass_to_excel():
-    workbook = load_workbook("Banco de Dados Figueirense Base.xlsx")
-    sheet = workbook['Jogos']
-    # Assigned labels from sheet. Read them and dynamically make the dict?
-    column_labels = {
-        "CÓDIGO JOGO":1,
-        "DATA JOGO":2,
-        "TREINADOR":3,
-        "CATEGORIA":4,
-        "COMPETIÇÃO":6,
-        "FIGUEIRENSE":7,
-        "G.F.":8,
-        "G.A.":9,
-        "ADVERSÁRIO":10,
-        "MANDO":11,
-        "LOCAL":12,
-        "Cidade":13,
-        "UF":14,
-        "JOGOS":15,
-        "VITÓRIA":16,
-        "EMPATE":17,
-        "DERROTA":18,
-        "MINUTOS JOGADOS":19,
-        "1º A MARCAR FIGUEIRENSE":20,
-        "1º A MARCAR ADVERSÁRIO":21,
-        "GOLS MARCADOS 1ºT - 0'-15'":22,
-        "GOLS MARCADOS 1ºT - 15'-30'":23,
-        "GOLS MARCADOS 1ºT - 30'-45'":24,
-        "GOLS MARCADOS 2ºT - 0'-15'":25,
-        "GOLS MARCADOS 2ºT - 15'-30'":26,
-        "GOLS MARCADOS 2ºT - 30'-45'":27,
-        "GOLS SOFRIDOS 1ºT - 0'-15'":28,
-        "GOLS SOFRIDOS 1ºT - 15'-30'":29,
-        "GOLS SOFRIDOS 1ºT - 30'-45'":30,
-        "GOLS SOFRIDOS 2ºT - 0'-15'":31,
-        "GOLS SOFRIDOS 2ºT - 15'-30'":32,
-        "GOLS SOFRIDOS 2ºT - 30'-45'":33
-    }
-    last_row = sheet.max_row
-    last_row_value = sheet.cell(row=last_row, column=column_labels['CÓDIGO JOGO']).value
-    print(last_row)
-    print(last_row_value)
+# def pass_to_excel():
+#     workbook = load_workbook("Banco de Dados Figueirense Base.xlsx")
+#     sheet = workbook['Jogos']
+#     # Assigned labels from sheet. Read them and dynamically make the dict?
+#     column_labels = {
+#         "CÓDIGO JOGO":1,
+#         "DATA JOGO":2,
+#         "TREINADOR":3,
+#         "CATEGORIA":4,
+#         "COMPETIÇÃO":6,
+#         "FIGUEIRENSE":7,
+#         "G.F.":8,
+#         "G.A.":9,
+#         "ADVERSÁRIO":10,
+#         "MANDO":11,
+#         "LOCAL":12,
+#         "Cidade":13,
+#         "UF":14,
+#         "JOGOS":15,
+#         "VITÓRIA":16,
+#         "EMPATE":17,
+#         "DERROTA":18,
+#         "MINUTOS JOGADOS":19,
+#         "1º A MARCAR FIGUEIRENSE":20,
+#         "1º A MARCAR ADVERSÁRIO":21,
+#         "GOLS MARCADOS 1ºT - 0'-15'":22,
+#         "GOLS MARCADOS 1ºT - 15'-30'":23,
+#         "GOLS MARCADOS 1ºT - 30'-45'":24,
+#         "GOLS MARCADOS 2ºT - 0'-15'":25,
+#         "GOLS MARCADOS 2ºT - 15'-30'":26,
+#         "GOLS MARCADOS 2ºT - 30'-45'":27,
+#         "GOLS SOFRIDOS 1ºT - 0'-15'":28,
+#         "GOLS SOFRIDOS 1ºT - 15'-30'":29,
+#         "GOLS SOFRIDOS 1ºT - 30'-45'":30,
+#         "GOLS SOFRIDOS 2ºT - 0'-15'":31,
+#         "GOLS SOFRIDOS 2ºT - 15'-30'":32,
+#         "GOLS SOFRIDOS 2ºT - 30'-45'":33
+#     }
+#     last_row = sheet.max_row
+#     last_row_value = sheet.cell(row=last_row, column=column_labels['CÓDIGO JOGO']).value
+#     print(last_row)
+#     print(last_row_value)
     # new_row = last_row + 1
     # sheet.cell(row=last_row, column=column_labels['CÓDIGO JOGO'],)
 
@@ -102,8 +102,8 @@ place_locator = time_locator.find_next(string="Local:").find_next()
 place = place_locator.get_text()
 
 # tests
-print (BeautifulSoup().PREFERRED_PARSER)
-print (openpyxl.__version__)
+# print (BeautifulSoup().PREFERRED_PARSER)
+# print (openpyxl.__version__)
 print(opponent)
 print(full_tournament)
 print(figueira_final_score)
@@ -113,4 +113,4 @@ print(category)
 print(date)
 print(time)
 print(place)
-pass_to_excel()
+# pass_to_excel()
