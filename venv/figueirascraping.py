@@ -90,7 +90,7 @@ def pass_to_excel():
     sheet.cell(row=new_row, column=column_labels['VITÓRIA'],value=1 if figueira_final_score > opponent_final_score else 0)
     sheet.cell(row=new_row, column=column_labels['EMPATE'],value=1 if figueira_final_score == opponent_final_score else 0)
     sheet.cell(row=new_row, column=column_labels['DERROTA'],value=1 if figueira_final_score < opponent_final_score else 0)
-    # sheet.cell(row=new_row, column=column_labels['MINUTOS JOGADOS'],value=)
+    # sheet.cell(row=new_row, column=column_labels['MINUTOS JOGADOS'],value = first_half_minutes + second_half_minutes)
     # sheet.cell(row=new_row, column=column_labels['1º A MARCAR FIGUEIRENSE'],value=1 if figueira_first else 0)
     # sheet.cell(row=new_row, column=column_labels['1º A MARCAR ADVERSÁRIO'],value=1 if figueira_first else 0)
 
@@ -133,11 +133,27 @@ date = date_locator.find_next(string=caps_lock_ignore('/202'))
 time_locator = date.find_next(string='Horário:')
 time = time_locator.find_next().get_text()
 
-# Find local
+# Find place
 place_locator = time_locator.find_next(string="Local:").find_next()
 place = place_locator.get_text().split(' / ')
 city = place[1]
 place = place[0]
+
+# Find minutes played
+def minute_splitter(time: str):
+    numbers = time.split(":")
+    return int(numbers[1])
+first_half_locator = targetURL.find(name="td",string="Início 1° Tempo:").find_next()
+first_half_started = first_half_locator.get_text()
+first_half_finished = targetURL.find(name="td",string="Término do 1º Tempo:").find_next()
+first_half_added_time = first_half_finished.find_next(name="td",string="Acréscimo:").find_next().get_text()
+first_half_finished = first_half_finished.get_text()
+first_half_minutes = minute_splitter(first_half_finished) + minute_splitter(first_half_added_time) - minute_splitter(first_half_started)
+second_half_locator = targetURL.find(name="td",string="Início 2° Tempo:").find_next()
+second_half_started = second_half_locator.get_text()
+
+
+print(first_half_minutes)
 
 #Scoring information
 score_locator_beginning = targetURL.find(string=caps_lock_ignore("5.0 - GOLS"))
@@ -168,10 +184,4 @@ if figueira_final_score or opponent_final_score != 0:
 else:
     figueira_first=False
 
-# tests
-# print (BeautifulSoup().PREFERRED_PARSER)
-# print (openpyxl.__version__)
-print(place_locator)
-print(place)
-print(city)
 # pass_to_excel()
