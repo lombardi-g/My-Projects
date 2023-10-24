@@ -84,19 +84,19 @@ def pass_to_excel():
     sheet.cell(row=new_row, column=column_labels['ADVERSÁRIO'],value=opponent)
     sheet.cell(row=new_row, column=column_labels['MANDO'],value=home)
     sheet.cell(row=new_row, column=column_labels['LOCAL'],value=place)
-    # sheet.cell(row=new_row, column=column_labels['Cidade'],value=)
-    # sheet.cell(row=new_row, column=column_labels['UF'],value=)
-    # sheet.cell(row=new_row, column=column_labels['JOGOS'],value=1)
-    # sheet.cell(row=new_row, column=column_labels['VITÓRIA'],value=1 if figueira_final_score > opponent_final_score else 0)
-    # sheet.cell(row=new_row, column=column_labels['EMPATE'],value=1 if figueira_final_score == opponent_final_score else 0)
-    # sheet.cell(row=new_row, column=column_labels['DERROTA'],value=1 if figueira_final_score < opponent_final_score else 0)
+    sheet.cell(row=new_row, column=column_labels['Cidade'],value=city)
+    sheet.cell(row=new_row, column=column_labels['UF'],value="SC")
+    sheet.cell(row=new_row, column=column_labels['JOGOS'],value=1)
+    sheet.cell(row=new_row, column=column_labels['VITÓRIA'],value=1 if figueira_final_score > opponent_final_score else 0)
+    sheet.cell(row=new_row, column=column_labels['EMPATE'],value=1 if figueira_final_score == opponent_final_score else 0)
+    sheet.cell(row=new_row, column=column_labels['DERROTA'],value=1 if figueira_final_score < opponent_final_score else 0)
     # sheet.cell(row=new_row, column=column_labels['MINUTOS JOGADOS'],value=)
     # sheet.cell(row=new_row, column=column_labels['1º A MARCAR FIGUEIRENSE'],value=1 if figueira_first else 0)
     # sheet.cell(row=new_row, column=column_labels['1º A MARCAR ADVERSÁRIO'],value=1 if figueira_first else 0)
 
     workbook.save("Banco de Dados Figueirense Base.xlsx")
 
-url = 'https://egol.fcf.com.br/SISGOL/WDER0700_Sumula.asp?SelStart1=2023&SelStop1=2023&SelStart2=505&SelStop2=505&SelStart3=9&SelStop3=9&Index=1&RunReport=Run+Report'
+url = 'https://egol.fcf.com.br/SISGOL/WDER0700_Sumula.asp?SelStart1=2023&SelStop1=2023&SelStart2=557&SelStop2=557&SelStart3=67&SelStop3=67&Index=1&RunReport=Run+Report'
 response = requests.get(url)
 targetURL = BeautifulSoup(response.text, 'html.parser')
 
@@ -135,7 +135,9 @@ time = time_locator.find_next().get_text()
 
 # Find local
 place_locator = time_locator.find_next(string="Local:").find_next()
-place = place_locator.get_text()
+place = place_locator.get_text().split(' / ')
+city = place[1]
+place = place[0]
 
 #Scoring information
 score_locator_beginning = targetURL.find(string=caps_lock_ignore("5.0 - GOLS"))
@@ -169,13 +171,7 @@ else:
 # tests
 # print (BeautifulSoup().PREFERRED_PARSER)
 # print (openpyxl.__version__)
-print(opponent)
-print(full_tournament)
-print(figueira_final_score)
-print(opponent_final_score)
-print(round_number)
-print(category)
-print(date)
-print(time)
+print(place_locator)
 print(place)
-pass_to_excel()
+print(city)
+# pass_to_excel()
