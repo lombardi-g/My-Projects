@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl import load_workbook
 import requests
 import re
-# import datetime
+from datetime import datetime
 # import os
 # import tkinter as tk
 # from tkinter import messagebox
@@ -90,9 +90,9 @@ def pass_to_excel():
     sheet.cell(row=new_row, column=column_labels['VITÓRIA'],value=1 if figueira_final_score > opponent_final_score else 0)
     sheet.cell(row=new_row, column=column_labels['EMPATE'],value=1 if figueira_final_score == opponent_final_score else 0)
     sheet.cell(row=new_row, column=column_labels['DERROTA'],value=1 if figueira_final_score < opponent_final_score else 0)
-    # sheet.cell(row=new_row, column=column_labels['MINUTOS JOGADOS'],value = first_half_minutes + second_half_minutes)
-    # sheet.cell(row=new_row, column=column_labels['1º A MARCAR FIGUEIRENSE'],value=1 if figueira_first else 0)
-    # sheet.cell(row=new_row, column=column_labels['1º A MARCAR ADVERSÁRIO'],value=1 if figueira_first else 0)
+    sheet.cell(row=new_row, column=column_labels['MINUTOS JOGADOS'],value = int(first_half_minutes) + int(second_half_minutes))
+    sheet.cell(row=new_row, column=column_labels['1º A MARCAR FIGUEIRENSE'],value=1 if figueira_first else 0)
+    sheet.cell(row=new_row, column=column_labels['1º A MARCAR ADVERSÁRIO'],value=1 if figueira_first else 0)
 
     workbook.save("Banco de Dados Figueirense Base.xlsx")
 
@@ -140,23 +140,25 @@ city = place[1]
 place = place[0]
 
 # Find minutes played
-def minute_splitter(time: str):
-    numbers = time.split(":")
-    return int(numbers[1])
+def minute_calculator(start: str, end: str, added: str):
+    format = '%H:%M'
+    match_start = datetime.strptime(start,format)
+    match_end = datetime.strptime(end,format)
+    added_time = datetime.strptime(added,format)
+    return match_end - match_start + added_time
+    
 first_half_locator = targetURL.find(name="td",string="Início 1° Tempo:").find_next()
 first_half_started = first_half_locator.get_text()
 first_half_finished = targetURL.find(name="td",string="Término do 1º Tempo:").find_next()
 first_half_added_time = first_half_finished.find_next(name="td",string="Acréscimo:").find_next().get_text()
 first_half_finished = first_half_finished.get_text()
-first_half_minutes = minute_splitter(first_half_finished) + minute_splitter(first_half_added_time) - minute_splitter(first_half_started)
+first_half_minutes = datetime.strftime(minute_calculator(first_half_started, first_half_finished, first_half_added_time),'%M')
 second_half_locator = targetURL.find(name="td",string="Início 2° Tempo:").find_next()
 second_half_started = second_half_locator.get_text()
 second_half_finished = targetURL.find(name="td", string="Término do 2º Tempo:").find_next()
 second_half_added_time = second_half_finished.find_next(name="td",string="Acréscimo:").find_next().find_next().get_text()
 second_half_finished = second_half_finished.get_text()
-second_half_minutes = minute_splitter(second_half_finished) + minute_splitter(second_half_added_time) - minute_splitter(second_half_started)
-
-print(second_half_minutes)
+second_half_minutes = datetime.strftime(minute_calculator(second_half_started,second_half_finished, second_half_added_time),'%M')
 
 #Scoring information
 score_locator_beginning = targetURL.find(string=caps_lock_ignore("5.0 - GOLS"))
