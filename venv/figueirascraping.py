@@ -151,9 +151,12 @@ first_half_finished = first_half_finished.get_text()
 first_half_minutes = minute_splitter(first_half_finished) + minute_splitter(first_half_added_time) - minute_splitter(first_half_started)
 second_half_locator = targetURL.find(name="td",string="Início 2° Tempo:").find_next()
 second_half_started = second_half_locator.get_text()
+second_half_finished = targetURL.find(name="td", string="Término do 2º Tempo:").find_next()
+second_half_added_time = second_half_finished.find_next(name="td",string="Acréscimo:").find_next().find_next().get_text()
+second_half_finished = second_half_finished.get_text()
+second_half_minutes = minute_splitter(second_half_finished) + minute_splitter(second_half_added_time) - minute_splitter(second_half_started)
 
-
-print(first_half_minutes)
+print(second_half_minutes)
 
 #Scoring information
 score_locator_beginning = targetURL.find(string=caps_lock_ignore("5.0 - GOLS"))
