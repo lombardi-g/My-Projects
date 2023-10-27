@@ -96,7 +96,7 @@ def pass_to_excel():
 
     workbook.save("Banco de Dados Figueirense Base.xlsx")
 
-url = 'https://egol.fcf.com.br/SISGOL/WDER0700_Sumula.asp?SelStart1=2023&SelStop1=2023&SelStart2=557&SelStop2=557&SelStart3=67&SelStop3=67&Index=1&RunReport=Run+Report'
+url = 'https://egol.fcf.com.br/SISGOL/WDER0700_Sumula.asp?SelStart1=2023&SelStop1=2023&SelStart2=557&SelStop2=557&SelStart3=70&SelStop3=70&Index=1&RunReport=Run+Report'
 response = requests.get(url)
 targetURL = BeautifulSoup(response.text, 'html.parser')
 
@@ -189,4 +189,4 @@ if figueira_final_score or opponent_final_score != 0:
 else:
     figueira_first=False
 
-# pass_to_excel()
+pass_to_excel()
