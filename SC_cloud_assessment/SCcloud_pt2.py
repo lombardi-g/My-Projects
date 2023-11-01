@@ -10,7 +10,7 @@ def validate():
         try:
             check_number = int(input("Qual n-ésimo dígito da sequência de Fibonacci deseja? "))
             if check_number > 0:
-                # print(fibonacci_n) #test
+                # print(check_number) #test
                 return check_number
             else:
                 print("Inserir número positivo.")
