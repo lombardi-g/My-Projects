@@ -28,8 +28,6 @@ def read_raw_HC():
  
     return(exported_headers)
 
-
-
 def write_compiled_HC(header_map):
     # start_row = destination_sheet.max_row + 1
     
@@ -42,6 +40,10 @@ def write_compiled_HC(header_map):
                 new_row[final_index] = row[raw_key]
         
         destination_sheet.append(new_row)
+
+    def cell_typing:
+        ...
+        # TODO: arrumar tipos das células no arquivo compilado (destino)
 
 header_map = read_raw_HC()
 corrected_headers = [cell.value for cell in destination_sheet[1]]
